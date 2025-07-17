@@ -13,12 +13,11 @@ export function DepositPanel() {
     address: CONTRACT_ADDRESS,
     abi: CONTRACT_ABI,
     functionName: 'getDeposit',
-    args: [address!],
+    args: address ? [address] : undefined,
     query: { enabled: !!address },
   });
 
   const { writeContractAsync, isPending } = useWriteContract();
-
   const [withdrawAmount, setWithdrawAmount] = useState('');
 
   const handleDeposit = async () => {
@@ -57,7 +56,7 @@ export function DepositPanel() {
         <div className="text-lg font-semibold">Your Deposit:</div>
         <div className="text-xl">
           {depositBalance !== undefined
-            ? `${Number(formatEther(depositBalance)).toFixed(2)} MATIC`
+            ? `${Number(formatEther(depositBalance as bigint)).toFixed(2)} MATIC`
             : '0.00 MATIC'}
         </div>
 

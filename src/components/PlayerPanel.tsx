@@ -18,17 +18,17 @@ export function PlayerPanel() {
     address: CONTRACT_ADDRESS,
     abi: CONTRACT_ABI,
     functionName: 'getDeposit',
-    args: [address!],
+    args: address ? [address] : undefined,
     query: { enabled: !!address },
   });
 
   const { writeContractAsync, isPending } = useWriteContract();
 
   const handleBet = async (team: number) => {
-    if (!isConnected) return;
-    if (!myDeposit) return;
+    if (!isConnected || myDeposit === undefined) return;
     try {
-      if (myDeposit >= parseEther('1')) {
+      const depositBigInt = myDeposit as bigint;
+      if (depositBigInt >= parseEther('1')) {
         await writeContractAsync({
           address: CONTRACT_ADDRESS,
           abi: CONTRACT_ABI,
@@ -36,7 +36,7 @@ export function PlayerPanel() {
           args: [team],
         });
       } else {
-        const shortfall = parseEther('1') - myDeposit;
+        const shortfall = parseEther('1') - depositBigInt;
         await writeContractAsync({
           address: CONTRACT_ADDRESS,
           abi: CONTRACT_ABI,
@@ -57,20 +57,18 @@ export function PlayerPanel() {
         <div className="text-lg font-semibold">Place Your Bet (1 MATIC)</div>
         <div>
           Remaining Time:{' '}
-          {remainingTime !== undefined
-            ? `${Number(remainingTime)} sec`
-            : 'Loading...'}
+          {remainingTime !== undefined ? `${Number(remainingTime)} sec` : 'Loading...'}
         </div>
 
         <div className="flex space-x-2">
           <Button
-            disabled={!isConnected || isPending || (remainingTime && Number(remainingTime) === 0)}
+            disabled={!isConnected || isPending || (remainingTime !== undefined && Number(remainingTime) === 0)}
             onClick={() => handleBet(1)}
           >
             Bet on Team A
           </Button>
           <Button
-            disabled={!isConnected || isPending || (remainingTime && Number(remainingTime) === 0)}
+            disabled={!isConnected || isPending || (remainingTime !== undefined && Number(remainingTime) === 0)}
             onClick={() => handleBet(2)}
           >
             Bet on Team B
