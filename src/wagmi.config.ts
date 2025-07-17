@@ -1,5 +1,5 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { mainnet, polygon, polygonMumbai } from 'wagmi/chains';
+import { /*mainnet,*/ polygon, polygonMumbai } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
   appName: 'Betting DApp',

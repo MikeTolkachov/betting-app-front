@@ -3,7 +3,7 @@ import { PlayerPanel } from './components/PlayerPanel';
 import { ClaimRewardPanel } from '@/components/ClaimRewardPanel';
 import { MatchStatusPanel } from '@/components/MatchStatusPanel';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { Card } from '@/components/ui/card';
+//import { Card } from '@/components/ui/card';
 
 export default function App() {
   return (
